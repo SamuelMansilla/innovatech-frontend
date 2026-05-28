@@ -1,6 +1,5 @@
-name: Pipeline CI/CD Frontend
+name: Pipeline Pipeline CI/CD Backend Ventas
 
-# REQUISITO DEL ENCARGO: El pipeline solo se activa en la rama 'deploy'
 on:
   push:
     branches:
@@ -9,7 +8,6 @@ on:
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
-    
     steps:
       - name: 1. Checkout del código fuente
         uses: actions/checkout@v3
@@ -25,4 +23,22 @@ jobs:
         with:
           context: .
           push: true
-          tags: petardorecursos/front-despacho:latest
+          tags: petardorecursos/back-ventas:latest
+
+  deploy-to-private-ec2:
+    needs: build-and-push
+    runs-on: ubuntu-latest
+    steps:
+      - name: 4. Desplegar usando EC2-Frontend como puente (Bastion)
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.EC2_PRIVATE_IP }}     # IP Interna de tu Backend (10.0...)
+          username: ec2-user
+          key: ${{ secrets.EC2_SSH_KEY }}
+          proxy_host: ${{ secrets.EC2_PUBLIC_IP }} # IP Pública de tu Frontend (El puente)
+          proxy_username: ec2-user
+          proxy_key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            cd /home/ec2-user/app
+            docker compose pull back-ventas
+            docker compose up -d --remove-orphans back-ventas

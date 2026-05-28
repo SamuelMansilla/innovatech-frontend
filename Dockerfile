@@ -18,17 +18,16 @@ COPY . .
 RUN npm run build
 
 # ==========================================
-# ETAPA 2: Ejecución (Servidor Web)
+# ETAPA 2: Ejecución (Servidor Web Estándar)
 # ==========================================
-# MÍNIMO PRIVILEGIO: Usamos una imagen oficial de Nginx pre-configurada para no ser root.
-# Si usamos el 'nginx:alpine' normal, requeriría configuraciones complejas para quitar el root.
-FROM nginxinc/nginx-unprivileged:alpine
+# Cambiamos a la versión oficial estándar de Nginx para poder usar el puerto 80 nativo de internet
+FROM nginx:alpine
 
 # Copiamos la carpeta 'dist' generada en la Etapa 1 hacia el directorio público de Nginx
 COPY --from=builder /app/dist /usr/share/nginx/html
 
-# Esta imagen de Nginx sin privilegios expone por defecto el puerto 8080 (el puerto 80 requiere root)
-EXPOSE 8080
+# Exponemos el puerto 80 estándar de HTTP para responder directo a las consultas del navegador
+EXPOSE 80
 
 # Comando para iniciar Nginx y mantenerlo en primer plano
 CMD ["nginx", "-g", "daemon off;"]
