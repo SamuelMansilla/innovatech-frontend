@@ -1,33 +1,24 @@
-# ==========================================
-# ETAPA 1: Construcción (Builder)
-# ==========================================
-FROM node:18-alpine AS builder
-
+# Etapa 1: Construcción de los archivos estáticos
+FROM node:20-alpine AS build
 WORKDIR /app
 
-# OPTIMIZACIÓN DE CACHÉ: Copiamos primero los archivos de dependencias
+# Copiar archivos de dependencias
 COPY package*.json ./
+RUN npm install
 
-# Instalamos las dependencias (usamos 'npm ci' porque es más limpio y rápido para CI/CD)
-RUN npm ci
-
-# Copiamos el resto del código (componentes, assets, configuraciones)
+# Copiar el resto del código y compilar
 COPY . .
-
-# Construimos la aplicación para producción (Vite generará una carpeta llamada 'dist')
 RUN npm run build
 
-# ==========================================
-# ETAPA 2: Ejecución (Servidor Web Estándar)
-# ==========================================
-# Cambiamos a la versión oficial estándar de Nginx para poder usar el puerto 80 nativo de internet
-FROM nginx:alpine
+# Etapa 2: Servidor de producción usando Nginx
+FROM nginx:1.25-alpine
 
-# Copiamos la carpeta 'dist' generada en la Etapa 1 hacia el directorio público de Nginx
-COPY --from=builder /app/dist /usr/share/nginx/html
+# Copiar los archivos compilados desde la etapa anterior al directorio de Nginx
+# Nota: Si usas React clásico cambia 'dist' por 'build'. Si usas Vite, déjalo en 'dist'.
+COPY --from=build /app/dist /usr/share/nginx/html
 
-# Exponemos el puerto 80 estándar de HTTP para responder directo a las consultas del navegador
+# Copiar configuración personalizada de Nginx si la tuvieras (opcional)
+# COPY nginx.conf /etc/nginx/conf.d/default.conf
+
 EXPOSE 80
-
-# Comando para iniciar Nginx y mantenerlo en primer plano
 CMD ["nginx", "-g", "daemon off;"]
