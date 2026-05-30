@@ -47,8 +47,8 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
             cd /home/ec2-user/app
-            # Autenticar Docker con tu ID de cuenta AWS
-            aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 536888590851.dkr.ecr.us-east-1.amazonaws.com
+            # Autenticar Docker con tu NUEVO ID de cuenta AWS
+            aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 264683506277.dkr.ecr.us-east-1.amazonaws.com
             # Descargar la nueva versión del Frontend y levantarla
             docker compose pull frontend
             docker compose up -d --remove-orphans frontend
