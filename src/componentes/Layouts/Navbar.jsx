@@ -1,17 +1,17 @@
 function Navbar() {
   return (
-    // 🌟 Cambiamos bg-teal-600 por bg-indigo-600
-    <nav className="rounded-xl w-[250px] min-h-[880px] bg-indigo-600 text-white sticky top-0 p-4 m-4">
+    // 🌟 Cambiamos bg-indigo-600 por bg-red-600 para el fondo principal
+    <nav className="rounded-xl w-[250px] min-h-[880px] bg-red-600 text-white sticky top-0 p-4 m-4 shadow-lg">
       {/* Logo o título */}
-      <h2 className="text-xl font-bold mb-8">Despacho Dashboard</h2>
+      <h2 className="text-xl font-bold mb-8 border-b border-red-500 pb-3">Despacho Dashboard</h2>
 
       {/* Menú de navegación */}
       <ul className="space-y-3">
         <li>
           <a
             href="#"
-            // 🌟 Cambiamos hover:bg-teal-700 por hover:bg-indigo-700
-            className="block font-bold py-2 px-3 hover:bg-indigo-700 rounded"
+            // 🌟 Cambiamos hover:bg-indigo-700 por hover:bg-red-700
+            className="block font-bold py-2 px-3 hover:bg-red-700 rounded transition-colors duration-200"
           >
             Usuarios
           </a>
@@ -19,7 +19,8 @@ function Navbar() {
         <li>
           <a
             href="#"
-            className="block font-bold py-2 px-3 hover:bg-indigo-700 rounded"
+            // 🌟 Cambiamos hover:bg-indigo-700 por hover:bg-red-700
+            className="block font-bold py-2 px-3 hover:bg-red-700 rounded transition-colors duration-200"
           >
             Productos
           </a>
@@ -27,7 +28,8 @@ function Navbar() {
         <li>
           <a
             href="#"
-            className="block font-bold py-2 px-3 hover:bg-indigo-700 rounded"
+            // 🌟 Cambiamos hover:bg-indigo-700 por hover:bg-red-700
+            className="block font-bold py-2 px-3 hover:bg-red-700 rounded transition-colors duration-200"
           >
             Configuración
           </a>
